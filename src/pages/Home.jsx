@@ -4,6 +4,9 @@ import { LogoutOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Chart } from "@antv/g2";
 import DataComponent from "../components/DataComponent";
+import AumentarVida from "../components/AumentarVida";
+import AumentarFelicidad from "../components/AumentarFelicidad";
+import Revivir from "../components/Revivir";
 import "./css/Home.css";
 
 const Home = () => {
@@ -12,6 +15,7 @@ const Home = () => {
   const [chartWidth, setChartWidth] = useState(0);
   const [data, setData] = useState({}); // Definimos los hooks aquí
   const [estado, setEstado] = useState("Estado normal");
+  const [activeComponent, setActiveComponent] = useState(null); // Nuevo estado
 
   const handleLogout = () => logout({ returnTo: window.location.origin });
 
@@ -126,37 +130,34 @@ const Home = () => {
 
         {/* Contenedor de botones */}
         <div className="buttonsContainer">
-          <Button className="actionButton">Alimentar</Button>
-          <Button className="actionButton">Hidratar</Button>
-          <Button className="actionButton">Abanicar</Button>
-          <Button className="actionButton">Acariciar</Button>
-          <Button className="actionButton">Bañar</Button>
-          <Button className="actionButton">Calentar</Button>
+          <Button
+            className="actionButton"
+            onClick={() => setActiveComponent("AumentarVida")}
+          >
+            Alimentar
+          </Button>
+          <Button
+            className="actionButton"
+            onClick={() => setActiveComponent("AumentarFelicidad")}
+          >
+            Aumentar Felicidad
+          </Button>
+          <Button
+            className="actionButton"
+            onClick={() => setActiveComponent("Revivir")}
+          >
+            Revivir
+          </Button>
+          {/* Otros botones */}
+        </div>
+
+        {/* Renderizar el componente activo */}
+        <div className="componentContainer">
+          {activeComponent === "AumentarVida" && <AumentarVida />}
+          {activeComponent === "AumentarFelicidad" && <AumentarFelicidad />}
+          {activeComponent === "Revivir" && <Revivir />}
         </div>
       </div>
-
-      {/* Panel de control */}
-      <div className="panelContainer">
-        <Button className="buttonPanel" onClick={showModal}>
-          Panel de Control
-        </Button>
-        <Modal
-          className="modal"
-          title="Panel de Control"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <Button className="buttonmodal" onClick={showModal}>
-            Matar Mascota
-          </Button>
-          <Button className="buttonmodal" onClick={showModal}>
-            Resucitar Mascota
-          </Button>
-        </Modal>
-      </div>
-
-      {/* Componente que actualiza el estado */}
       <DataComponent setEstado={setEstado} setData={setData} />
     </>
   ) : (
