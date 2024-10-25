@@ -1,3 +1,10 @@
+// COMPONENTES
+import DataComponent, { data } from '../components/DataComponent';
+import AumentarFelicidad from '../components/AumentarFelicidad';
+import AumentarVida from '../components/AumentarVida';
+import Revivir from '../components/Revivir';
+
+// REACT
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 // ANT DESIGN
 import { Button, Dropdown, Menu, Space, Modal } from 'antd';
@@ -30,7 +37,7 @@ const Home = () => {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
-    const progress = 1;
+    const progress = data ? data.puntosVida / 100 : 1; // Calcular el progreso con puntosVida
     const chart = new Chart({
       container: 'chart-container',
       autoFit: false,
@@ -63,7 +70,7 @@ const Home = () => {
       chart.destroy();
       window.removeEventListener('resize', handleResize);
     };
-  }, [chartWidth]);
+  }, [chartWidth, data]); // Agregar data a la dependencia del useEffect
 
   // NAVBAR
   const menu = (
@@ -108,14 +115,21 @@ const Home = () => {
 
       {/* CONTAINER PRINCIPAL */}
       <div className="mainContainer"> 
+        
         {/* BLOQUE ESTADÍSTICA */}
         <div className="statsContainer"> 
-          ESTADÍSTICAS
+          <DataComponent />
         </div>
 
         {/* BLOQUE GIF */}
         <div className="gifContainer" >
-          <div style={{ ...styles.chartContainer, width: chartWidth }} id="chart-container"></div>
+
+          {/* BARRA DE VIDA */}
+          <div style={{ ...styles.chartContainer, width: chartWidth }} id="chart-container">
+
+          </div>
+
+          {/* GIF */}
           <div className="gifWrapper"> 
             <img
               ref={gifRef}
@@ -131,8 +145,7 @@ const Home = () => {
         <div className="buttonsContainer"> 
           <Space direction="vertical" size="large"> 
             <Space size="large" wrap>
-              <Button className="actionButton">Alimentar</Button> 
-              <Button className="actionButton">Hidratar</Button> 
+              <Button className="actionButton">Alimentar e Hidratar</Button> 
               <Button className="actionButton">Abanicar</Button> 
               <Button className="actionButton">Acariciar</Button> 
               <Button className="actionButton">Bañar</Button> 
@@ -173,4 +186,5 @@ const styles = {
     zIndex: 10,
   },
 };
+
 export default Home;

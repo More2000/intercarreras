@@ -2,13 +2,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Statistics from './pages/Statistics';
-import ControlPanel from './pages/ControlPanel';
 
 // AUTH 0
 import { useAuth0 } from '@auth0/auth0-react';
 
-// VERIFICA SI EL USARIO ESTÁ AUTORIZADO PARA ENTRAR A OTRA RUTA QUE NO SEA EL LOGIN
+// VERIFICA SI EL USARIO ESTÁ AUTORIZAD|O PARA ENTRAR A OTRA RUTA QUE NO SEA EL LOGIN
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth0();
 
@@ -26,24 +24,6 @@ function App() {
         element={
           <PrivateRoute>
             <Home />
-          </PrivateRoute>
-        }
-      />
-      {/* ESTADÍSTICAS */}
-      <Route
-        path="statistics"
-        element={
-          <PrivateRoute>
-            <Statistics />
-          </PrivateRoute>
-        }
-      />
-      {/* PANEL DE CONTROL */}
-      <Route
-        path="control-panel"
-        element={
-          <PrivateRoute>
-            <ControlPanel />
           </PrivateRoute>
         }
       />
