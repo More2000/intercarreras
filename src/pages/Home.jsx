@@ -93,6 +93,7 @@ const Home = () => {
       </div>
 
       <div className="mainContainer">
+        {/* Contenedor de estadísticas */}
         <div className="statsContainer">
           <h1>ESTADÍSTICAS</h1>
           <ul>
@@ -105,6 +106,7 @@ const Home = () => {
           </ul>
         </div>
 
+        {/* Contenedor de la mascota y estado */}
         <div className="gifContainer">
           <div
             style={{ ...styles.chartContainer, width: chartWidth }}
@@ -122,20 +124,18 @@ const Home = () => {
           <div className="estadoContainer">{estado}</div>
         </div>
 
+        {/* Contenedor de botones */}
         <div className="buttonsContainer">
-          <Space direction="vertical" size="large">
-            <Space size="large" wrap>
-              <Button className="actionButton">Alimentar</Button>
-              <Button className="actionButton">Hidratar</Button>
-              <Button className="actionButton">Abanicar</Button>
-              <Button className="actionButton">Acariciar</Button>
-              <Button className="actionButton">Bañar</Button>
-              <Button className="actionButton">Calentar</Button>
-            </Space>
-          </Space>
+          <Button className="actionButton">Alimentar</Button>
+          <Button className="actionButton">Hidratar</Button>
+          <Button className="actionButton">Abanicar</Button>
+          <Button className="actionButton">Acariciar</Button>
+          <Button className="actionButton">Bañar</Button>
+          <Button className="actionButton">Calentar</Button>
         </div>
       </div>
 
+      {/* Panel de control */}
       <div className="panelContainer">
         <Button className="buttonPanel" onClick={showModal}>
           Panel de Control
