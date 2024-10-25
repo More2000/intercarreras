@@ -6,9 +6,12 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { useAuth0 } from '@auth0/auth0-react';
 // G2 Chart
 import { Chart } from '@antv/g2';
+// CSS
+import './css/Home.css'; 
+
 const Home = () => {
   const { user, logout, isAuthenticated } = useAuth0();
-  const gifRef = useRef(null); // Usamos useRef para referenciar el GIF
+  const gifRef = useRef(null); 
   const [chartWidth, setChartWidth] = useState(0);
 
   const handleLogout = () => {
@@ -17,7 +20,7 @@ const Home = () => {
 
   const handleResize = () => {
     if (gifRef.current) {
-      setChartWidth(gifRef.current.clientWidth); // Ajusta el ancho del gráfico al ancho del GIF
+      setChartWidth(gifRef.current.clientWidth); 
     }
   };
 
@@ -62,7 +65,7 @@ const Home = () => {
     };
   }, [chartWidth]);
 
-// NAVBAR
+  // NAVBAR
   const menu = (
     <Menu>
       <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={handleLogout}>
@@ -71,23 +74,23 @@ const Home = () => {
     </Menu>
   );
 
-// MODAL PANEL DE CONTROL
-const [isModalOpen, setIsModalOpen] = useState(false);
-const showModal = () => {
-  setIsModalOpen(true);
-};
-const handleOk = () => {
-  setIsModalOpen(false);
-};
-const handleCancel = () => {
-  setIsModalOpen(false);
-};
+  // MODAL PANEL DE CONTROL
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   return isAuthenticated ? (
     <>
       {/* NAVBAR */}
-      <div style={styles.navContainer}>
-        <span style={styles.userName}>{user.name}</span>
+      <div className="navContainer"> 
+        <span className="userName">{user.name}</span> 
         <Dropdown overlay={menu} trigger={['click']} placement="bottomRight">
           <Button
             shape="circle"
@@ -95,63 +98,62 @@ const handleCancel = () => {
               <img
                 src="https://cdn-icons-png.flaticon.com/512/4032/4032999.png"
                 alt="icon"
-                style={styles.icon}
+                className="icon" 
               />
             }
-            style={styles.button}
+            className="button" 
           />
         </Dropdown>
       </div>
 
       {/* CONTAINER PRINCIPAL */}
-      <div style={styles.mainContainer}>
-        
+      <div className="mainContainer"> 
         {/* BLOQUE ESTADÍSTICA */}
-        <div style={styles.statsContainer}>
+        <div className="statsContainer"> 
           ESTADÍSTICAS
         </div>
 
         {/* BLOQUE GIF */}
-        <div style={styles.gifContainer}>
+        <div className="gifContainer" >
           <div style={{ ...styles.chartContainer, width: chartWidth }} id="chart-container"></div>
-          <div style={styles.gifWrapper}>
+          <div className="gifWrapper"> 
             <img
               ref={gifRef}
               src="https://www.icegif.com/wp-content/uploads/dinosaur-icegif-20.gif"
               alt="GIF"
-              style={styles.gif}
+              className="gif" 
               onLoad={handleResize}
             />
           </div>
         </div>
 
         {/* BLOQUE BOTONES*/}
-        <div style={styles.buttonsContainer}>
+        <div className="buttonsContainer"> 
           <Space direction="vertical" size="large"> 
-              <Space size="large" wrap>
-              <Button style={styles.rectangleButton}>Alimentar</Button>
-              <Button style={styles.rectangleButton}>Hidratar</Button>
-              <Button style={styles.rectangleButton}>Abanicar</Button>
-              <Button style={styles.rectangleButton}>Acariciar</Button>
-              <Button style={styles.rectangleButton}>Bañar</Button>
-              <Button style={styles.rectangleButton}>Calentar</Button>
-              </Space>
+            <Space size="large" wrap>
+              <Button className="actionButton">Alimentar</Button> 
+              <Button className="actionButton">Hidratar</Button> 
+              <Button className="actionButton">Abanicar</Button> 
+              <Button className="actionButton">Acariciar</Button> 
+              <Button className="actionButton">Bañar</Button> 
+              <Button className="actionButton">Calentar</Button> 
+            </Space>
           </Space>
         </div>
       </div>
 
       {/* PANEL DE CONTROL */}
-      <div style={styles.panelContainer}>
-        <Button style={styles.buttonPanel} onClick={showModal}>
+      <div className="panelContainer" > 
+        <Button className="buttonPanel" onClick={showModal}> 
           Panel de Control
         </Button>
-        <Modal style={styles.modal} title="Panel de Control" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <Button style={styles.buttonmodal} onClick={showModal}>
-          Matar Mascota
-        </Button>
-        <Button style={styles.buttonmodal} onClick={showModal}>
-          Resucitar Mascota
-        </Button>
+        <Modal className="modal" title="Panel de Control" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}> 
+          <Button className="buttonmodal" onClick={showModal}> 
+            Matar Mascota
+          </Button>
+          <Button className="buttonmodal" onClick={showModal}> 
+            Resucitar Mascota
+          </Button>
         </Modal>
       </div>
     </>
@@ -160,111 +162,8 @@ const handleCancel = () => {
   );
 };
 
+// RESIZE DE LA BARRA DE VIDA
 const styles = {
-  navContainer: {
-    position: 'fixed',
-    top: '10px',
-    right: '20px',
-    zIndex: 1000,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  userName: {
-    marginRight: '20px',
-    fontSize: '14px',
-    fontWeight: 'bold',
-  },
-  button: {
-    width: '40px',
-    height: '40px',
-    backgroundColor: '#a0ff03'
-  },
-  icon: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-  mainContainer: {
-    display: 'flex',
-    width: '97vw',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: '60vh',
-    padding: '0 20px',
-    /* Vertical | Horizontal */
-    margin: '4% auto'
-  },
-  statsContainer: {
-    width: '25%',
-    height: '100%',
-    backgroundColor: 'transparent',
-    border: '2px solid #a0ff03',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#a0ff03',
-    fontWeight: 'bold',
-  },
-  gifContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '40%',
-    height: '100%',
-    position: 'relative',
-    border: '3px solid black',
-    boxSizing: 'border-box',
-  },
-  gifWrapper: { 
-    position: 'relative',
-  },
-  gif: {
-    maxWidth: '100%',
-    maxHeight: '100%',
-    objectFit: 'cover',
-  },
-  buttonsContainer: {
-    border: '3px solid black',
-    width: '20%', 
-    height: '100%',
-    flexDirection: 'column', // Cambiamos la dirección a columna
-    justifyContent: 'center',
-    alignItems: 'center',   
-  },
-  rectangleButton: {
-    objectFit: 'cover',
-    backgroundColor: '#a0ff03',
-    border: 'none',
-    fontWeight: 'bold',
-    fontSize: '20px', 
-    padding: '25px 100px',
-    width: '100%', // Establecemos el ancho del botón al 100% del contenedor
-  },
-  panelContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '10px 20px',
-  },
-  buttonPanel: {
-    width: '25%',
-    display: 'flex',
-    backgroundColor: '#a0ff03',
-    fontWeight: 'bold',
-  },
-  modal: {
-    display: 'flex',
-    padding: '100px',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontWeight: 'bold',
-  },
-  buttonmodal: {
-    width: '100%',
-    display: 'flex',
-    backgroundColor: '#a0ff03',
-    fontWeight: 'bold',
-  },
   chartContainer: {
     position: 'absolute',
     top: '-40px',
@@ -274,5 +173,4 @@ const styles = {
     zIndex: 10,
   },
 };
-
 export default Home;

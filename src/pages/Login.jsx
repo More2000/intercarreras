@@ -1,5 +1,5 @@
 // CSS
-import './css/Login.css';
+import './css/Login.css'; 
 
 // IMPORTACIONES
 import { useEffect } from 'react';
@@ -20,8 +20,8 @@ const Login = () => {
 
   return (
     !isAuthenticated && (
-      <div className="login-container">
-        <button  onClick={() => loginWithRedirect({ connection: 'google-oauth2' })}>
+      <div className="loginContainer">
+        <button className="buttonLogin"  onClick={() => loginWithRedirect({ connection: 'google-oauth2' })}>
           Iniciar sesión con Google
         </button>
       </div>
