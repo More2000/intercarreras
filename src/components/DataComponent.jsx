@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 const DataComponent = ({ setData, setEstado }) => {
   const [loading, setLoading] = useState(true);

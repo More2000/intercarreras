@@ -1,24 +1,17 @@
-// COMPONENTES
-import DataComponent, { data } from '../components/DataComponent';
-import AumentarFelicidad from '../components/AumentarFelicidad';
-import AumentarVida from '../components/AumentarVida';
-import Revivir from '../components/Revivir';
-
-// REACT
 import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Button, Dropdown, Menu, Space, Modal } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Chart } from "@antv/g2";
-import DataComponent from "../components/DataComponent"; // Importar DataComponent
+import DataComponent from "../components/DataComponent";
 import "./css/Home.css";
 
 const Home = () => {
   const { user, logout, isAuthenticated } = useAuth0();
   const gifRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(0);
-  const [data, setData] = useState({});
-  const [estado, setEstado] = useState("Estado normal"); // Estado inicial
+  const [data, setData] = useState({}); // Definimos los hooks aquí
+  const [estado, setEstado] = useState("Estado normal");
 
   const handleLogout = () => logout({ returnTo: window.location.origin });
 
@@ -31,8 +24,8 @@ const Home = () => {
   useLayoutEffect(() => handleResize(), []);
 
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    const progress = 1;
+    window.addEventListener("resize", handleResize);
+    const progress = data.puntosVida ? data.puntosVida / 100 : 1;
     const chart = new Chart({
       container: "chart-container",
       autoFit: false,
@@ -65,7 +58,7 @@ const Home = () => {
       chart.destroy();
       window.removeEventListener("resize", handleResize);
     };
-  }, [chartWidth]);
+  }, [chartWidth, data]);
 
   const menu = (
     <Menu>
@@ -99,17 +92,25 @@ const Home = () => {
         </Dropdown>
       </div>
 
-      {/* CONTAINER PRINCIPAL */}
-      <div className="mainContainer"> 
-        {/* BLOQUE ESTADÍSTICA */}
-        <div className="statsContainer"> 
-          ESTADÍSTICAS
+      <div className="mainContainer">
+        <div className="statsContainer">
+          <h1>ESTADÍSTICAS</h1>
+          <ul>
+            <li>Cantidad de agua: {data.waterAmount}</li>
+            <li>Cantidad de comida: {data.foodAmount}</li>
+            <li>Felicidad: {data.happyAmount}</li>
+            <li>Temperatura: {data.temperature}</li>
+            <li>Humedad: {data.humidity}</li>
+            <li>Luz: {data.light}</li>
+          </ul>
         </div>
 
-        {/* BLOQUE GIF */}
-        <div className="gifContainer" >
-          <div style={{ ...styles.chartContainer, width: chartWidth }} id="chart-container"></div>
-          <div className="gifWrapper"> 
+        <div className="gifContainer">
+          <div
+            style={{ ...styles.chartContainer, width: chartWidth }}
+            id="chart-container"
+          ></div>
+          <div className="gifWrapper">
             <img
               ref={gifRef}
               src="https://www.icegif.com/wp-content/uploads/dinosaur-icegif-20.gif"
@@ -121,22 +122,20 @@ const Home = () => {
           <div className="estadoContainer">{estado}</div>
         </div>
 
-        {/* BLOQUE BOTONES*/}
-        <div className="buttonsContainer"> 
-          <Space direction="vertical" size="large"> 
+        <div className="buttonsContainer">
+          <Space direction="vertical" size="large">
             <Space size="large" wrap>
-              <Button className="actionButton">Alimentar</Button> 
-              <Button className="actionButton">Hidratar</Button> 
-              <Button className="actionButton">Abanicar</Button> 
-              <Button className="actionButton">Acariciar</Button> 
-              <Button className="actionButton">Bañar</Button> 
-              <Button className="actionButton">Calentar</Button> 
+              <Button className="actionButton">Alimentar</Button>
+              <Button className="actionButton">Hidratar</Button>
+              <Button className="actionButton">Abanicar</Button>
+              <Button className="actionButton">Acariciar</Button>
+              <Button className="actionButton">Bañar</Button>
+              <Button className="actionButton">Calentar</Button>
             </Space>
           </Space>
         </div>
       </div>
 
-      {/* Panel de control */}
       <div className="panelContainer">
         <Button className="buttonPanel" onClick={showModal}>
           Panel de Control
