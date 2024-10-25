@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 // ANT DESIGN
-import { Button, Dropdown, Menu, Col, Row, Modal } from 'antd';
+import { Button, Dropdown, Menu, Space, Modal } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 // AUTH0
 import { useAuth0 } from '@auth0/auth0-react';
@@ -70,6 +70,7 @@ const Home = () => {
       </Menu.Item>
     </Menu>
   );
+
 // MODAL PANEL DE CONTROL
 const [isModalOpen, setIsModalOpen] = useState(false);
 const showModal = () => {
@@ -106,7 +107,9 @@ const handleCancel = () => {
       <div style={styles.mainContainer}>
         
         {/* BLOQUE ESTADÍSTICA */}
-        <div style={styles.statsContainer}>ESTADÍSTICAS</div>
+        <div style={styles.statsContainer}>
+          ESTADÍSTICAS
+        </div>
 
         {/* BLOQUE GIF */}
         <div style={styles.gifContainer}>
@@ -124,23 +127,16 @@ const handleCancel = () => {
 
         {/* BLOQUE BOTONES*/}
         <div style={styles.buttonsContainer}>
-          <Row>
-            <Col>
-            <Button style={styles.circleButton} />
-            </Col>
-            <Col><Button style={styles.circleButton} /></Col>
-            <Col><Button style={styles.circleButton} /></Col>
-          </Row>
-          <Row>
-            <Col><Button style={styles.circleButton} /></Col>
-            <Col><Button style={styles.circleButton} /></Col>
-            <Col><Button style={styles.circleButton} /></Col>
-          </Row>
-          <Row>
-            <Col><Button style={styles.circleButton} /></Col>
-            <Col><Button style={styles.circleButton} /></Col>
-            <Col><Button style={styles.circleButton} /></Col>
-          </Row>
+          <Space direction="vertical" size="large"> 
+              <Space size="large" wrap>
+              <Button style={styles.rectangleButton}>Alimentar</Button>
+              <Button style={styles.rectangleButton}>Hidratar</Button>
+              <Button style={styles.rectangleButton}>Abanicar</Button>
+              <Button style={styles.rectangleButton}>Acariciar</Button>
+              <Button style={styles.rectangleButton}>Bañar</Button>
+              <Button style={styles.rectangleButton}>Calentar</Button>
+              </Space>
+          </Space>
         </div>
       </div>
 
@@ -190,11 +186,13 @@ const styles = {
   },
   mainContainer: {
     display: 'flex',
-    width: '95vw',
+    width: '97vw',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '60vh',
     padding: '0 20px',
+    /* Vertical | Horizontal */
+    margin: '4% auto'
   },
   statsContainer: {
     width: '25%',
@@ -217,12 +215,36 @@ const styles = {
     border: '3px solid black',
     boxSizing: 'border-box',
   },
+  gifWrapper: { 
+    position: 'relative',
+  },
+  gif: {
+    maxWidth: '100%',
+    maxHeight: '100%',
+    objectFit: 'cover',
+  },
+  buttonsContainer: {
+    border: '3px solid black',
+    width: '20%', 
+    height: '100%',
+    flexDirection: 'column', // Cambiamos la dirección a columna
+    justifyContent: 'center',
+    alignItems: 'center',   
+  },
+  rectangleButton: {
+    objectFit: 'cover',
+    backgroundColor: '#a0ff03',
+    border: 'none',
+    fontWeight: 'bold',
+    fontSize: '20px', 
+    padding: '25px 100px',
+    width: '100%', // Establecemos el ancho del botón al 100% del contenedor
+  },
   panelContainer: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     padding: '10px 20px',
-    margin: '3% auto 0 auto', // Centrar el botón debajo del GIF
   },
   buttonPanel: {
     width: '25%',
@@ -232,6 +254,7 @@ const styles = {
   },
   modal: {
     display: 'flex',
+    padding: '100px',
     justifyContent: 'center',
     alignItems: 'center',
     fontWeight: 'bold',
@@ -242,14 +265,6 @@ const styles = {
     backgroundColor: '#a0ff03',
     fontWeight: 'bold',
   },
-  gifWrapper: { 
-    position: 'relative',
-  },
-  gif: {
-    maxWidth: '100%',
-    maxHeight: '100%',
-    objectFit: 'cover',
-  },
   chartContainer: {
     position: 'absolute',
     top: '-40px',
@@ -257,18 +272,6 @@ const styles = {
     transform: 'translateX(-50%)',
     height: '60px',
     zIndex: 10,
-  },
-  buttonsContainer: {
-    width: '25%',
-    display: 'flex',
-    justifyContent: 'space-around',
-  },
-  circleButton: {
-    width: '50px',
-    height: '50px',
-    borderRadius: '50%',
-    backgroundColor: '#a0ff03',
-    border: 'none',
   },
 };
 
