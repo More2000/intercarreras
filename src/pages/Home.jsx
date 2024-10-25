@@ -1,3 +1,10 @@
+// COMPONENTES
+import DataComponent, { data } from '../components/DataComponent';
+import AumentarFelicidad from '../components/AumentarFelicidad';
+import AumentarVida from '../components/AumentarVida';
+import Revivir from '../components/Revivir';
+
+// REACT
 import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Button, Dropdown, Menu, Space, Modal } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
@@ -24,8 +31,8 @@ const Home = () => {
   useLayoutEffect(() => handleResize(), []);
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    const progress = data.puntosVida ? data.puntosVida / 100 : 1;
+    window.addEventListener('resize', handleResize);
+    const progress = 1;
     const chart = new Chart({
       container: "chart-container",
       autoFit: false,
@@ -58,7 +65,7 @@ const Home = () => {
       chart.destroy();
       window.removeEventListener("resize", handleResize);
     };
-  }, [chartWidth, data]);
+  }, [chartWidth]);
 
   const menu = (
     <Menu>
@@ -92,27 +99,17 @@ const Home = () => {
         </Dropdown>
       </div>
 
-      <div className="mainContainer">
-        {/* Contenedor de estadísticas */}
-        <div className="statsContainer">
-          <h1>ESTADÍSTICAS</h1>
-          <ul>
-            <li>Cantidad de agua: {data.waterAmount}</li>
-            <li>Cantidad de comida: {data.foodAmount}</li>
-            <li>Felicidad: {data.happyAmount}</li>
-            <li>Temperatura: {data.temperature}</li>
-            <li>Humedad: {data.humidity}</li>
-            <li>Luz: {data.light}</li>
-          </ul>
+      {/* CONTAINER PRINCIPAL */}
+      <div className="mainContainer"> 
+        {/* BLOQUE ESTADÍSTICA */}
+        <div className="statsContainer"> 
+          ESTADÍSTICAS
         </div>
 
-        {/* Contenedor de la mascota y estado */}
-        <div className="gifContainer">
-          <div
-            style={{ ...styles.chartContainer, width: chartWidth }}
-            id="chart-container"
-          ></div>
-          <div className="gifWrapper">
+        {/* BLOQUE GIF */}
+        <div className="gifContainer" >
+          <div style={{ ...styles.chartContainer, width: chartWidth }} id="chart-container"></div>
+          <div className="gifWrapper"> 
             <img
               ref={gifRef}
               src="https://www.icegif.com/wp-content/uploads/dinosaur-icegif-20.gif"
@@ -124,14 +121,18 @@ const Home = () => {
           <div className="estadoContainer">{estado}</div>
         </div>
 
-        {/* Contenedor de botones */}
-        <div className="buttonsContainer">
-          <Button className="actionButton">Alimentar</Button>
-          <Button className="actionButton">Hidratar</Button>
-          <Button className="actionButton">Abanicar</Button>
-          <Button className="actionButton">Acariciar</Button>
-          <Button className="actionButton">Bañar</Button>
-          <Button className="actionButton">Calentar</Button>
+        {/* BLOQUE BOTONES*/}
+        <div className="buttonsContainer"> 
+          <Space direction="vertical" size="large"> 
+            <Space size="large" wrap>
+              <Button className="actionButton">Alimentar</Button> 
+              <Button className="actionButton">Hidratar</Button> 
+              <Button className="actionButton">Abanicar</Button> 
+              <Button className="actionButton">Acariciar</Button> 
+              <Button className="actionButton">Bañar</Button> 
+              <Button className="actionButton">Calentar</Button> 
+            </Space>
+          </Space>
         </div>
       </div>
 
