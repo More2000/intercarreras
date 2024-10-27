@@ -17,7 +17,6 @@ const AumentarFelicidad = () => {
 
     return (
         <div>
-            <h2>Aumentar Felicidad</h2>
             <button onClick={aumentarFelicidad}>
                 Aumentar Felicidad en 20 puntos
             </button>

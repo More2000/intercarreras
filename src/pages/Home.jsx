@@ -102,8 +102,8 @@ const Home = () => {
       <div className="navContainer">
 
         <div className="buttonPrincipio">
-          <button className="buttonBoot" onClick={handleIniciar}>Iniciar</button>
-          <button  onClick={handleReiniciar}>Reiniciar</button>
+          <button className="buttonBoot"  onClick={handleIniciar}>Iniciar</button>
+          <button className="buttonBoot"  onClick={handleReiniciar}>Reiniciar</button>
         </div>
 
         {/* LOGOUT */}
@@ -173,7 +173,6 @@ const Home = () => {
          <div className="componentContainer">
             {activeComponent === "AumentarVida" && <AumentarVida />}
             {activeComponent === "AumentarFelicidad" && <AumentarFelicidad />}
-            {activeComponent === "Revivir" && <Revivir />}
          </div>
         </div>
       </div>
@@ -193,8 +192,9 @@ const Home = () => {
             Matar Mascota
           </Button>
           <Button className="buttonmodal" onClick={() => setActiveComponent("Revivir")}> 
-            Resucitar Mascota
+            Revivir Mascota
           </Button>
+          {activeComponent === "Revivir" && <Revivir />}
         </Modal>
       </div>
 

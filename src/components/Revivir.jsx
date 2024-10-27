@@ -25,7 +25,6 @@ const Revivir = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            <h2>Revivir Personaje</h2>
             <button
                 type="primary"
                 onClick={revivirPersonaje}

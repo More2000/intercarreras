@@ -10,12 +10,25 @@
     align-items: center;
   }
 
+  .buttonPrincipio{
+    margin-left: 3%;
+  }
+  .buttonBoot{
+    object-fit: cover;
+    font-family: 'Press Start 2P', cursive;
+    background-color: #a0ff03;
+    color: black;
+    border: none;
+    font-size: 15px; 
+    flex: 1;
+  }
+
   .userName {
     font-family: 'Press Start 2P', cursive;
     margin-right: 20px;
     font-size: 15px;
     font-weight: bold;
-    
+    align-items: center;
   }
   
   .button {
@@ -79,7 +92,7 @@
     justify-content: center;
     align-items: center;
     /* Arriba | Derecha | Abajo | Izquierda */
-    margin: 0 0 3% 0;
+    margin: 1% 0 1% 0;
     padding: 10px 20px;
   }
 
