@@ -3,6 +3,7 @@ import { Button, Dropdown, Menu, Space, Modal } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Chart } from "@antv/g2";
+import axios from "axios";
 import DataComponent from "../components/DataComponent";
 import AumentarVida from "../components/AumentarVida";
 import AumentarFelicidad from "../components/AumentarFelicidad";
@@ -71,6 +72,24 @@ const Home = () => {
       </Menu.Item>
     </Menu>
   );
+  const handleIniciar = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/iniciar?ok=true");
+      console.log(response);
+    } catch (error) {
+      console.error("Error al iniciar:", error);
+    }
+  };
+  const handleReiniciar = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/iniciar?ok=false"
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error al reiniciar:", error);
+    }
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => setIsModalOpen(true);
@@ -79,6 +98,8 @@ const Home = () => {
 
   return isAuthenticated ? (
     <>
+      <button onClick={handleIniciar}>Iniciar</button>
+      <button onClick={handleReiniciar}>Reiniciar</button>
       <div className="navContainer">
         <span className="userName">{user.name}</span>
         <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">

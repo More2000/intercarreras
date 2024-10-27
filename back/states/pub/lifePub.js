@@ -26,7 +26,7 @@ const happyTopic = "happy";
 const dataTopic = "data";
 const revivirTopic = "revivir";
 
-let puntosVida = 3;
+let puntosVida = 100;
 let waterAmount = 100;
 let foodAmount = 100;
 let happyAmount = 53;
@@ -36,6 +36,7 @@ let light;
 let personajeVivo = true;
 let estado = 0;
 let vidaInterval = null;
+let iniciado = false;
 
 const maxVida = 100;
 const umbralHambre = 40;
@@ -71,12 +72,6 @@ client.on("connect", () => {
   client.subscribe(revivirTopic, () =>
     console.log(`Suscrito al tópico ${revivirTopic}`)
   );
-
-  vidaInterval = setInterval(() => {
-    if (personajeVivo && !processing) {
-      descontarVidaYSustancias();
-    }
-  }, 5000);
 });
 
 client.on("message", (topic, message) => {
@@ -130,6 +125,7 @@ client.on("message", (topic, message) => {
 });
 
 function iniciarDescuentoDeVida() {
+  if (!iniciado) return;
   if (vidaInterval) {
     clearInterval(vidaInterval);
   }
@@ -215,11 +211,52 @@ function verificarYPublicarEstado() {
     client.publish(lifeTopic, JSON.stringify({ estado }));
     console.log("Estado actualizado a:", estado);
   }
-  
+
   // Publicar los datos actualizados
   client.publish(lifeTopic, JSON.stringify(currentState));
 }
 
+// Endpoint para iniciar o detener el contador de vida
+app.get("/iniciar", (req, res) => {
+  const { ok } = req.query;
+
+  if (ok === "true" && !iniciado) {
+    iniciado = true;
+    iniciarDescuentoDeVida();
+    console.log("El contador de vida ha comenzado.");
+    res.send("Contador iniciado.");
+
+  } else if (ok === "false" && iniciado) {
+    // Detener el contador y reiniciar valores
+    clearInterval(vidaInterval);
+    vidaInterval = null;
+    iniciado = false;
+
+    // Reiniciar los valores al estado inicial
+    puntosVida = 100;
+    waterAmount = 100;
+    foodAmount = 100;
+    happyAmount = 53;
+    personajeVivo = true;
+    estado = 0;
+    currentState = {
+      puntosVida,
+      waterAmount,
+      foodAmount,
+      happyAmount,
+      temperature,
+      humidity,
+      light,
+      estado,
+    };
+
+    console.log("El contador de vida ha sido detenido y reiniciado.");
+    res.send("Contador detenido y valores reiniciados.");
+
+  } else {
+    res.send("Solicitud no válida o ya está en el estado solicitado.");
+  }
+});
 app.get("/estado", (req, res) => {
   res.json(currentState);
 });
