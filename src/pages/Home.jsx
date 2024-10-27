@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
-import { Button, Dropdown, Menu, Space, Modal } from "antd";
+import { Button, Dropdown, Menu, Space, Modal, Tag } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Chart } from "@antv/g2";
@@ -98,29 +98,38 @@ const Home = () => {
 
   return isAuthenticated ? (
     <>
-      <button onClick={handleIniciar}>Iniciar</button>
-      <button onClick={handleReiniciar}>Reiniciar</button>
+      {/* NAVBAR */}
       <div className="navContainer">
-        <span className="userName">{user.name}</span>
-        <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
-          <Button
-            shape="circle"
-            icon={
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/4032/4032999.png"
-                alt="icon"
-                className="icon"
-              />
-            }
-            className="button"
-          />
-        </Dropdown>
+
+        <div className="buttonPrincipio">
+          <button className="buttonBoot" onClick={handleIniciar}>Iniciar</button>
+          <button  onClick={handleReiniciar}>Reiniciar</button>
+        </div>
+
+        {/* LOGOUT */}
+        <div>
+          <span className="userName">{user.name}</span>
+          <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
+            <Button
+              className="button"
+              shape="circle"
+              icon={
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/4032/4032999.png"
+                  alt="icon"
+                  className="icon"
+                />
+              }
+            />
+          </Dropdown>
+        </div>
       </div>
 
+      {/* CONTAINER PRINCIPAL */}
       <div className="mainContainer">
-        {/* Contenedor de estadísticas */}
+
+        {/* CONTAINER DE ESTADÍSTICAS*/}
         <div className="statsContainer">
-          <h1>ESTADÍSTICAS</h1>
           <ul>
             <li>Cantidad de agua: {data.waterAmount}</li>
             <li>Cantidad de comida: {data.foodAmount}</li>
@@ -131,12 +140,16 @@ const Home = () => {
           </ul>
         </div>
 
-        {/* Contenedor de la mascota y estado */}
+        {/* CONTAINER DE MASCOTA*/}
         <div className="gifContainer">
+          
+          {/* BARRA DE VIDA */}
           <div
             style={{ ...styles.chartContainer, width: chartWidth }}
             id="chart-container"
           ></div>
+
+          {/* WRAPPER */}
           <div className="gifWrapper">
             <img
               ref={gifRef}
@@ -146,39 +159,45 @@ const Home = () => {
               onLoad={handleResize}
             />
           </div>
-          <div className="estadoContainer">{estado}</div>
         </div>
 
-        {/* Contenedor de botones */}
-        <div className="buttonsContainer">
-          <Button
-            className="actionButton"
-            onClick={() => setActiveComponent("AumentarVida")}
-          >
-            Alimentar
-          </Button>
-          <Button
-            className="actionButton"
-            onClick={() => setActiveComponent("AumentarFelicidad")}
-          >
-            Aumentar Felicidad
-          </Button>
-          <Button
-            className="actionButton"
-            onClick={() => setActiveComponent("Revivir")}
-          >
-            Revivir
-          </Button>
-          {/* Otros botones */}
-        </div>
-
-        {/* Renderizar el componente activo */}
-        <div className="componentContainer">
-          {activeComponent === "AumentarVida" && <AumentarVida />}
-          {activeComponent === "AumentarFelicidad" && <AumentarFelicidad />}
-          {activeComponent === "Revivir" && <Revivir />}
+        {/* BLOQUE BOTONES*/}
+        <div className="buttonsContainer"> 
+          <Space direction="vertical" size="large"> 
+            <Space size="large" wrap>
+              <Button className="actionButton" onClick={() => setActiveComponent("AumentarVida")}>Alimentar</Button> 
+              <Button className="actionButton" onClick={() => setActiveComponent("AumentarFelicidad")}>Aumentar Felicidad</Button> 
+            </Space>
+          </Space>
+          {/* Renderizar el componente activo */}
+         <div className="componentContainer">
+            {activeComponent === "AumentarVida" && <AumentarVida />}
+            {activeComponent === "AumentarFelicidad" && <AumentarFelicidad />}
+            {activeComponent === "Revivir" && <Revivir />}
+         </div>
         </div>
       </div>
+
+      {/* TAG ESTADO */}
+      <div className='stateContainer'>
+        <Tag className='tag'>{estado}</Tag> 
+      </div>
+
+      {/* PANEL DE CONTROL */}
+      <div className="panelContainer" > 
+        <Button className="buttonPanel" onClick={showModal}> 
+          Panel de Control
+        </Button>
+        <Modal className="modal" title="Panel de Control" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}> 
+          <Button className="buttonmodal" onClick={showModal}> 
+            Matar Mascota
+          </Button>
+          <Button className="buttonmodal" onClick={() => setActiveComponent("Revivir")}> 
+            Resucitar Mascota
+          </Button>
+        </Modal>
+      </div>
+
       <DataComponent setEstado={setEstado} setData={setData} />
     </>
   ) : (
