@@ -63,6 +63,7 @@
     align-items: center;
     color: #a0ff03;
     font-weight: bold;
+    text-align: center;
   }
   
   .gifContainer {
@@ -94,6 +95,11 @@
     /* Arriba | Derecha | Abajo | Izquierda */
     margin: 1% 0 1% 0;
     padding: 10px 20px;
+  }
+
+  .statItem{
+    font-family: 'Press Start 2P', cursive;
+    font-size: 11px;
   }
 
   .tag{

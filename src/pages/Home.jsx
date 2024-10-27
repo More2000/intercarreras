@@ -1,22 +1,26 @@
+import axios from "axios";
 import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
-import { Button, Dropdown, Menu, Space, Modal, Tag } from "antd";
+// DISEÑO
+import { Button, Dropdown, Menu, Space, Modal, Tag, Row, Col } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Chart } from "@antv/g2";
-import axios from "axios";
+
+// COMPONENTES
 import DataComponent from "../components/DataComponent";
 import AumentarVida from "../components/AumentarVida";
 import AumentarFelicidad from "../components/AumentarFelicidad";
 import Revivir from "../components/Revivir";
+// CSS
 import "./css/Home.css";
 
 const Home = () => {
   const { user, logout, isAuthenticated } = useAuth0();
   const gifRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(0);
-  const [data, setData] = useState({}); // Definimos los hooks aquí
+  const [data, setData] = useState({});
   const [estado, setEstado] = useState("Estado normal");
-  const [activeComponent, setActiveComponent] = useState(null); // Nuevo estado
+  const [activeComponent, setActiveComponent] = useState(null);
 
   const handleLogout = () => logout({ returnTo: window.location.origin });
 
@@ -30,6 +34,7 @@ const Home = () => {
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
+
     const progress = data.puntosVida ? data.puntosVida / 100 : 1;
     const chart = new Chart({
       container: "chart-container",
@@ -59,11 +64,67 @@ const Home = () => {
     chart.interaction("tooltip", false);
     chart.render();
     handleResize();
+
     return () => {
       chart.destroy();
       window.removeEventListener("resize", handleResize);
     };
   }, [chartWidth, data]);
+
+ // RENDERIZADO CHARTS
+  const renderStatChart = (containerId, value, label) => {
+    const determineColor = (value) => {
+      if (value > 50) return "#a0ff03"; // Verde
+      if (value >= 11) return "#FFA500"; // Naranja
+      return "#FF0000"; // Rojo
+    };
+  
+    const statChart = new Chart({
+      container: containerId,
+      autoFit: true,
+      width: 100,
+      height: 100,
+    });
+  
+    const color = determineColor(value);
+  
+    statChart.coordinate({ type: "theta", innerRadius: 0.7 });
+    statChart
+      .interval()
+      .data([1, value / 100])
+      .encode("y", (d) => d)
+      .encode("color", (d, idx) => idx)
+      .scale("y", { domain: [0, 1] })
+      .scale("color", { range: ["#000000", color] }) // Aplica color dinámico
+      .axis(false)
+      .legend(false);
+  
+    statChart.text().style({
+      text: `${Math.round(value)}%`,
+      x: "50%",
+      y: "50%",
+      textAlign: "center",
+      fontSize: 13,
+      fontStyle: "bold",
+      fill: color, // Color del texto actualizado a color dinámico
+      fontFamily: "'Press Start 2P', cursive", // Fuente actualizada
+    });
+    
+    statChart.interaction("tooltip", false);
+    statChart.render();
+  };  
+
+// VALORES CHARTS
+  useEffect(() => {
+    if (data) {
+      renderStatChart("chart-water", data.waterAmount, "Agua");
+      renderStatChart("chart-food", data.foodAmount, "Comida");
+      renderStatChart("chart-happiness", data.happyAmount, "Felicidad");
+      renderStatChart("chart-temperature", data.temperature, "Temperatura");
+      renderStatChart("chart-humidity", data.humidity, "Humedad");
+      renderStatChart("chart-light", data.light, "Luz");
+    }
+  }, [data]);
 
   const menu = (
     <Menu>
@@ -72,6 +133,7 @@ const Home = () => {
       </Menu.Item>
     </Menu>
   );
+
   const handleIniciar = async () => {
     try {
       const response = await axios.get("http://localhost:3001/iniciar?ok=true");
@@ -80,11 +142,10 @@ const Home = () => {
       console.error("Error al iniciar:", error);
     }
   };
+
   const handleReiniciar = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/iniciar?ok=false"
-      );
+      const response = await axios.get("http://localhost:3001/iniciar?ok=false");
       console.log(response);
     } catch (error) {
       console.error("Error al reiniciar:", error);
@@ -100,13 +161,10 @@ const Home = () => {
     <>
       {/* NAVBAR */}
       <div className="navContainer">
-
         <div className="buttonPrincipio">
-          <button className="buttonBoot"  onClick={handleIniciar}>Iniciar</button>
-          <button className="buttonBoot"  onClick={handleReiniciar}>Reiniciar</button>
+          <button className="buttonBoot" onClick={handleIniciar}>Iniciar</button>
+          <button className="buttonBoot" onClick={handleReiniciar}>Reiniciar</button>
         </div>
-
-        {/* LOGOUT */}
         <div>
           <span className="userName">{user.name}</span>
           <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
@@ -125,25 +183,50 @@ const Home = () => {
         </div>
       </div>
 
-      {/* CONTAINER PRINCIPAL */}
       <div className="mainContainer">
 
-        {/* CONTAINER DE ESTADÍSTICAS*/}
-        <div className="statsContainer">
-          <ul>
-            <li>Cantidad de agua: {data.waterAmount}</li>
-            <li>Cantidad de comida: {data.foodAmount}</li>
-            <li>Felicidad: {data.happyAmount}</li>
-            <li>Temperatura: {data.temperature}</li>
-            <li>Humedad: {data.humidity}</li>
-            <li>Luz: {data.light}</li>
-          </ul>
-        </div>
+        {/* CONTAINER ESTADÍSITCAS */}
+        <Row gutter={[16, 16]} justify="center" className="statsContainer">
+          <Col xs={24} sm={12} md={12} lg={8}>
+            <div className="statItem">
+              <span>Agua</span>
+              <div id="chart-water"></div>
+            </div>
+          </Col>
+          <Col xs={24} sm={12} md={12} lg={8}>
+            <div className="statItem">
+              <span>Comida</span>
+              <div id="chart-food"></div>
+            </div>
+          </Col>
+          <Col xs={24} sm={12} md={12} lg={8}>
+            <div className="statItem">
+              <span>Felicidad</span>
+              <div id="chart-happiness"></div>
+            </div>
+          </Col>
+          <Col xs={24} sm={12} md={12} lg={8}>
+            <div className="statItem">
+              <span>Temperatura</span>
+              <div id="chart-temperature"></div>
+            </div>
+          </Col>
+          <Col xs={24} sm={12} md={12} lg={8}>
+            <div className="statItem">
+              <span>Humedad</span>
+              <div id="chart-humidity"></div>
+            </div>
+          </Col>
+          <Col xs={24} sm={12} md={12} lg={8}>
+            <div className="statItem">
+              <span>Luz</span>
+              <div id="chart-light"></div>
+            </div>
+          </Col>
+        </Row>
 
-        {/* CONTAINER DE MASCOTA*/}
+        {/* MASCOTA CONTAINER*/}
         <div className="gifContainer">
-          
-          {/* BARRA DE VIDA */}
           <div
             style={{ ...styles.chartContainer, width: chartWidth }}
             id="chart-container"
@@ -161,37 +244,44 @@ const Home = () => {
           </div>
         </div>
 
-        {/* BLOQUE BOTONES*/}
-        <div className="buttonsContainer"> 
-          <Space direction="vertical" size="large"> 
+        {/* BOTONES CONTAINER */}
+        <div className="buttonsContainer">
+          <Space direction="vertical" size="large">
             <Space size="large" wrap>
-              <Button className="actionButton" onClick={() => setActiveComponent("AumentarVida")}>Alimentar</Button> 
-              <Button className="actionButton" onClick={() => setActiveComponent("AumentarFelicidad")}>Aumentar Felicidad</Button> 
+              <Button className="actionButton" onClick={() => setActiveComponent("AumentarVida")}>Alimentar</Button>
+              <Button className="actionButton" onClick={() => setActiveComponent("AumentarFelicidad")}>Aumentar Felicidad</Button>
             </Space>
           </Space>
-          {/* Renderizar el componente activo */}
-         <div className="componentContainer">
+          <div className="componentContainer">
             {activeComponent === "AumentarVida" && <AumentarVida />}
             {activeComponent === "AumentarFelicidad" && <AumentarFelicidad />}
-         </div>
+          </div>
         </div>
       </div>
 
-      {/* TAG ESTADO */}
-      <div className='stateContainer'>
-        <Tag className='tag'>{estado}</Tag> 
+      {/* ESTADO */}
+      <div className="stateContainer">
+        <Tag className="tag">{estado}</Tag>
       </div>
 
       {/* PANEL DE CONTROL */}
-      <div className="panelContainer" > 
-        <Button className="buttonPanel" onClick={showModal}> 
+      <div className="panelContainer">
+        <Button className="buttonPanel" onClick={showModal}>
           Panel de Control
         </Button>
-        <Modal className="modal" title="Panel de Control" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}> 
-          <Button className="buttonmodal" onClick={showModal}> 
+        <Modal
+          className="modal"
+          title="Panel de Control"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+
+          {/* MODAL */}
+          <Button className="buttonmodal" onClick={showModal}>
             Matar Mascota
           </Button>
-          <Button className="buttonmodal" onClick={() => setActiveComponent("Revivir")}> 
+          <Button className="buttonmodal" onClick={() => setActiveComponent("Revivir")}>
             Revivir Mascota
           </Button>
           {activeComponent === "Revivir" && <Revivir />}
