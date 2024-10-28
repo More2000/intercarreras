@@ -71,14 +71,14 @@
 }
 
 .gifWrapper {
-  width: 200px; /* Aumenta el tamaño de ancho */
-  height: 200px; /* Aumenta el tamaño de alto */
+  width: 300px; /* Reducir el ancho */
+  height: 300px; /* Reducir el alto */
 }
 
 .gif {
   width: 100%; /* Ajusta el GIF al tamaño del contenedor */
   height: 100%; /* Ajusta el GIF al tamaño del contenedor */
-  object-fit: cover; /* Asegura que el GIF se ajuste correctamente */
+  object-fit: contain; /* Asegura que el GIF se ajuste dentro de los límites */
 }
 
 .stateContainer {

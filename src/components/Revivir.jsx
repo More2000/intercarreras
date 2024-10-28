@@ -15,7 +15,7 @@ const Revivir = () => {
           vida: 100, // Convertir a número
         }
       );
-      notifgication.success({
+      notification.success({
         message: "La mascotota ha revivido",
         description: "La mascota ha sido revivido con 100 de vida.",
         duration: 2,
