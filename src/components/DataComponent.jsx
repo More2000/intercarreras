@@ -6,7 +6,7 @@ const DataComponent = ({ setData, setEstado }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/estado");
+      const response = await axios.get("https://life-pub-js.vercel.app/estado");
       setData(response.data); // Actualiza los datos
       processEstado(response.data.estado); // Procesa el estado
       console.log(response.data);
@@ -27,7 +27,7 @@ const DataComponent = ({ setData, setEstado }) => {
         setEstado("El personaje necesita agua");
         break;
       case 3:
-        setEstado("El personaje está aburrido");
+        setEstado("El personaje está triste");
         break;
       case 4:
         setEstado("El personaje está sofocado por la temperatura");
