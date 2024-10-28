@@ -2,6 +2,12 @@ require("dotenv").config();
 const mqtt = require("mqtt");
 const express = require("express");
 const cors = require("cors");
+const Data = require("../../models/DataModel"); // Ajusta la ruta según tu estructura de archivos
+const mongoose = require("mongoose");
+
+mongoose.connect(process.env.MONGODB_URI, {
+}).then(() => console.log("Conexión exitosa a MongoDB"))
+  .catch((error) => console.error("Error al conectar a MongoDB:", error));
 
 const app = express();
 app.use(cors());
@@ -74,7 +80,7 @@ client.on("connect", () => {
   );
 });
 
-client.on("message", (topic, message) => {
+client.on("message", async (topic, message) => {
   const parsedMessage = JSON.parse(message.toString());
 
   if (topic === necesidadesTopic && personajeVivo && !processing) {
@@ -106,8 +112,22 @@ client.on("message", (topic, message) => {
       light = newLight || 0;
       temperature = newTemperature || 0;
 
-      verificarYPublicarEstado();
+      try {
+        const newData = new Data({
+          temperature,
+          humidity,
+          light,
+          estado, // El estado actual del personaje
+        });
+        await newData.save(); // Guardado en MongoDB
+        console.log("Datos guardados en MongoDB:", { temperature, humidity, light, estado });
+      } catch (error) {
+        console.error("Error al guardar datos en MongoDB:", error);
+      }
+    } else {
+      console.log("Los datos no han cambiado");
     }
+    verificarYPublicarEstado();
   }
 
   if (topic === revivirTopic && !personajeVivo && estado === 8) {
