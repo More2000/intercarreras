@@ -21,6 +21,9 @@ const Login = () => {
   return (
     !isAuthenticated && (
       <div className="loginContainer">
+        <div className='logoContainer'>
+          <img src="../../gifs/feliz Quieto/feliGIF.gif" alt="" />
+        </div>
         <button className="buttonLogin"  onClick={() => loginWithRedirect({ connection: 'google-oauth2' })}>
           Iniciar sesión con Google
         </button>

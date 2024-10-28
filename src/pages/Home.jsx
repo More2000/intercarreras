@@ -1,17 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
+
 // DISEÑO
-import {
-  Button,
-  Dropdown,
-  Menu,
-  Space,
-  Modal,
-  Tag,
-  Row,
-  Col,
-  notification,
-} from "antd";
+import {Button,Dropdown,Menu,Space,Modal,Tag,Row,Col,notification,} from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Chart } from "@antv/g2";
@@ -21,6 +12,7 @@ import DataComponent from "../components/DataComponent";
 import AumentarVida from "../components/AumentarVida";
 import AumentarFelicidad from "../components/AumentarFelicidad";
 import Revivir from "../components/Revivir";
+
 // CSS
 import "./css/Home.css";
 
@@ -39,6 +31,8 @@ const gifsPorEstado = {
 };
 
 const Home = () => {
+
+  // HOOKS
   const { user, logout, isAuthenticated } = useAuth0();
   const gifRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(0);
@@ -47,12 +41,16 @@ const Home = () => {
   const [activeComponent, setActiveComponent] = useState(null);
   const gifActual = gifsPorEstado[data.estado] || gifsPorEstado[0];
 
+  // LOGOUT
   const handleLogout = () => logout({ returnTo: window.location.origin });
+
+  // RESIZE DEL GIF
   const handleResize = () => {
     if (gifRef.current) {
       setChartWidth(gifRef.current.clientWidth);
     }
   };
+
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -102,9 +100,9 @@ const Home = () => {
   // RENDERIZADO CHARTS
   const renderStatChart = (containerId, value, label) => {
     const determineColor = (value) => {
-      if (value > 50) return "#a0ff03"; // Verde
-      if (value >= 11) return "#FFA500"; // Naranja
-      return "#FF0000"; // Rojo
+      if (value > 50) return "#a0ff03"; 
+      if (value >= 11) return "#FFA500";
+      return "#FF0000";
     };
 
     const statChart = new Chart({
@@ -123,7 +121,7 @@ const Home = () => {
       .encode("y", (d) => d)
       .encode("color", (d, idx) => idx)
       .scale("y", { domain: [0, 1] })
-      .scale("color", { range: ["#000000", color] }) // Aplica color dinámico
+      .scale("color", { range: ["#000000", color] }) 
       .axis(false)
       .legend(false);
 
@@ -134,8 +132,8 @@ const Home = () => {
       textAlign: "center",
       fontSize: 13,
       fontStyle: "bold",
-      fill: color, // Color del texto actualizado a color dinámico
-      fontFamily: "'Press Start 2P', cursive", // Fuente actualizada
+      fill: color,
+      fontFamily: "'Press Start 2P', cursive",
     });
 
     statChart.interaction("tooltip", false);
@@ -162,6 +160,7 @@ const Home = () => {
     </Menu>
   );
 
+  // BOTON INICIAR
   const handleIniciar = async () => {
     try {
       const response = await axios.get(
@@ -178,6 +177,7 @@ const Home = () => {
     }
   };
 
+  // BOTON REINICIAR
   const handleReiniciar = async () => {
     try {
       const response = await axios.get(
@@ -194,6 +194,8 @@ const Home = () => {
       console.error("Error al reiniciar:", error);
     }
   };
+
+  // KILL PET
   const handleMatarMascota = async () => {
     try {
       const response = await axios.get(
@@ -210,6 +212,7 @@ const Home = () => {
     }
   };
 
+  // HOOKS MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => setIsModalOpen(true);
   const handleOk = () => setIsModalOpen(false);
@@ -372,11 +375,15 @@ const Home = () => {
 const styles = {
   chartContainer: {
     position: "absolute",
-    top: "120px",
+    top: "100px",
     left: "50%",
     transform: "translateX(-50%)",
     height: "60px",
     zIndex: 10,
+  },
+  gif: {
+    transform: "scale(2)", // Ajusta el factor de escala según el tamaño deseado
+    transformOrigin: "center",
   },
 };
 

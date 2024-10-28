@@ -3,10 +3,17 @@
   width: 100vw;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+.logoContainer{
+  width: auto;
+  display: block;
+  transform: scale(2);
 }
 
 .buttonLogin {
   width: auto;
   display: flex;
   justify-content: center;
+  margin-top: 3%;
 }
