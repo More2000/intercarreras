@@ -70,14 +70,14 @@
 }
 
 .gifWrapper {
-  width: 300px; /* Reducir el ancho */
-  height: 300px; /* Reducir el alto */
+  width: 300px;
+  height: 300px
 }
 
 .gif {
-  width: 100%; /* Ajusta el GIF al tamaño del contenedor */
-  height: 100%; /* Ajusta el GIF al tamaño del contenedor */
-  object-fit: contain; /* Asegura que el GIF se ajuste dentro de los límites */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .stateContainer {
@@ -125,6 +125,14 @@
   flex: 1;
 }
 
+.dropdownButton .ant-dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  background-color: #a0ff03; 
+  justify-content: center;
+  align-items: center;
+}
+
 .panelContainer {
   display: flex;
   justify-content: center;
@@ -157,7 +165,36 @@
   margin-bottom: 20%;
 }
 
+.modal .ant-modal-content {
+  background-color: #311D4F;
+}
+
+.modal .ant-modal-header {
+  color: #a0ff03;
+  justify-content: center;
+  align-items: center;
+  background-color: #311D4F;
+}
+
+.modal .ant-modal-close-x {
+color: #a0ff03;
+}
+
+.modal .ant-btn-primary {
+  font-family: "Press Start 2P", cursive;
+  background-color: #a0ff03;
+  color: rgb(0, 0, 0); 
+  font-size: 15px;
+}
+
+.modal .ant-btn-default {
+  font-family: "Press Start 2P", cursive;
+  color: #000000;
+  font-size: 15px;
+  margin-bottom: 8%;
+}
+
 #chart-container {
-  width: 80%; /* Ajusta este valor según el ancho deseado */
-  margin: 0 auto; /* Centra la barra dentro del contenedor */
+  width: 80%; 
+  margin: 0 auto; 
 }

@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 
 // DISEÑO
 import {Button,Dropdown,Menu,Space,Modal,Tag,Row,Col,notification,} from "antd";
-import { LogoutOutlined } from "@ant-design/icons";
+import { LogoutOutlined, DownOutlined } from "@ant-design/icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Chart } from "@antv/g2";
 
@@ -66,7 +66,7 @@ const Home = () => {
       container: "chart-container",
       autoFit: false,
       width: chartWidth,
-      height: 80, // Cambia de 60 a 80 para aumentar el tamaño
+      height: 80,
       padding: 0,
     });
     chart.coordinate({ transform: [{ type: "transpose" }] });
@@ -79,17 +79,25 @@ const Home = () => {
       .scale("color", { range: ["#000000", "#a0ff03"] })
       .legend(false)
       .axis(false);
-    chart.text().style({
-      text: `${Math.round(progress * 100)}%`,
-      x: "50%",
-      y: "50%",
-      textAlign: "center",
-      fontSize: 16,
-      fontStyle: "bold",
-    });
-    chart.interaction("tooltip", false);
-    chart.render();
-    handleResize();
+  // RANGO DE COLORES SEGUN PORCENTAJE
+  const getProgressColor = (progress) => {
+    if (progress <= 0.15) return "#FF0000"; // ROJO
+    if (progress <= 0.40) return "#FFA500"; // NARANJA
+    if (progress <= 0.59) return "#FFFF00"; // AMARILLO
+    return "#000000"; // NEGRO
+  };
+  chart.text().style({
+    text: `${Math.round(progress * 100)}%`,
+    x: "50%",
+    y: "50%",
+    textAlign: "center",
+    fontSize: 16,
+    fontStyle: "bold",
+    fill: getProgressColor(progress),
+  });
+  chart.interaction("tooltip", false);
+  chart.render();
+  handleResize();
 
     return () => {
       chart.destroy();
@@ -218,6 +226,33 @@ const Home = () => {
   const handleOk = () => setIsModalOpen(false);
   const handleCancel = () => setIsModalOpen(false);
 
+  // DROPDOWN ALIMENTAR
+const dropdownAlimentar = (
+  <Menu className="dropdownButton">
+    <Menu.Item key="1">
+      <AumentarVida />
+    </Menu.Item>
+  </Menu>
+);
+
+// DROPDOWN JUGAR
+const dropdownJugar = (
+  <Menu className="dropdownButton">
+    <Menu.Item key="1">
+      <AumentarFelicidad />
+    </Menu.Item>
+  </Menu>
+);
+
+// DROPDOWN REVIVIR
+const dropdownRevivir = (
+  <Menu className="dropdownButton">
+    <Menu.Item key="1">
+      <Revivir />
+    </Menu.Item>
+  </Menu>
+);
+
   return isAuthenticated ? (
     <>
       {/* NAVBAR */}
@@ -313,25 +348,19 @@ const Home = () => {
         <div className="buttonsContainer">
           <Space direction="vertical" size="large">
             <Space size="large" wrap>
-              <Button
-                className="actionButton"
-                onClick={() => setActiveComponent("AumentarVida")}
-              >
-                Alimentar
-              </Button>
-              <Button
-                className="actionButton"
-                onClick={() => setActiveComponent("AumentarFelicidad")}
-              >
-                Jugar
-              </Button>
+              <Dropdown overlay={dropdownAlimentar} overlayClassName="dropdownButton" trigger={["click"]}>
+                <Button className="actionButton">
+                  Alimentar <DownOutlined />
+                </Button>
+              </Dropdown>
+              <Dropdown overlay={dropdownJugar} overlayClassName="dropdownButton" trigger={["click"]}>
+                <Button className="actionButton">
+                  Jugar <DownOutlined />
+                </Button>
+              </Dropdown>
             </Space>
           </Space>
-          <div className="componentContainer">
-            {activeComponent === "AumentarVida" && <AumentarVida />}
-            {activeComponent === "AumentarFelicidad" && <AumentarFelicidad />}
-          </div>
-        </div>
+       </div>
       </div>
 
       {/* ESTADO */}
@@ -355,13 +384,11 @@ const Home = () => {
           <Button className="buttonmodal" onClick={handleMatarMascota}>
             Matar Mascota
           </Button>
-          <Button
-            className="buttonmodal"
-            onClick={() => setActiveComponent("Revivir")}
-          >
-            Revivir Mascota
-          </Button>
-          {activeComponent === "Revivir" && <Revivir />}
+          <Dropdown overlay={dropdownRevivir} overlayClassName="dropdownButton" trigger={["click"]}>
+                <Button className="actionButton">
+                  Revivir <DownOutlined />
+                </Button>
+          </Dropdown>
         </Modal>
       </div>
 
